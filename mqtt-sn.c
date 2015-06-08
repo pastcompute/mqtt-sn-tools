@@ -192,6 +192,7 @@ void* mqtt_sn_receive_packet(int sock)
 void mqtt_sn_send_connect(int sock, const char* client_id, uint16_t keepalive)
 {
     connect_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
 
     // Check that it isn't too long
     if (client_id && strlen(client_id) > 23) {
@@ -230,6 +231,7 @@ void mqtt_sn_send_connect(int sock, const char* client_id, uint16_t keepalive)
 void mqtt_sn_send_register(int sock, const char* topic_name)
 {
     register_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
     size_t topic_name_len = strlen(topic_name);
 
     if (topic_name_len > MQTT_SN_MAX_TOPIC_LENGTH) {
@@ -252,6 +254,7 @@ void mqtt_sn_send_register(int sock, const char* topic_name)
 void mqtt_sn_send_regack(int sock, int topic_id, int mesage_id)
 {
     regack_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
     packet.type = MQTT_SN_TYPE_REGACK;
     packet.topic_id = htons(topic_id);
     packet.message_id = htons(mesage_id);
@@ -283,6 +286,7 @@ static uint8_t mqtt_sn_get_qos_flag(int8_t qos)
 void mqtt_sn_send_publish(int sock, uint16_t topic_id, uint8_t topic_type, const void* data, int8_t qos, uint8_t retain)
 {
     publish_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
     size_t data_len = strlen(data);
 
     if (data_len > sizeof(packet.data)) {
@@ -310,6 +314,7 @@ void mqtt_sn_send_publish(int sock, uint16_t topic_id, uint8_t topic_type, const
 void mqtt_sn_send_subscribe_topic_name(int sock, const char* topic_name, uint8_t qos)
 {
     subscribe_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
     size_t topic_name_len = strlen(topic_name);
 
     packet.type = MQTT_SN_TYPE_SUBSCRIBE;
@@ -334,6 +339,7 @@ void mqtt_sn_send_subscribe_topic_name(int sock, const char* topic_name, uint8_t
 void mqtt_sn_send_subscribe_topic_id(int sock, uint16_t topic_id, uint8_t qos)
 {
     subscribe_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
     packet.type = MQTT_SN_TYPE_SUBSCRIBE;
     packet.flags = 0x00;
     packet.flags += mqtt_sn_get_qos_flag(qos);
@@ -364,6 +370,7 @@ void mqtt_sn_send_pingreq(int sock)
 void mqtt_sn_send_disconnect(int sock)
 {
     disconnect_packet_t packet;
+    memset(&packet, 0, sizeof(packet));
     packet.type = MQTT_SN_TYPE_DISCONNECT;
     packet.length = 0x02;
 
